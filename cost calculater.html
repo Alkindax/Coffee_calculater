@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        .buttons button {
+            width: 48%;
+        }
+        p {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Price Calculator</h1>
+    <form>
+        <label for="baseCost">Base Cost (OMR):</label>
+        <input type="number" id="baseCost" placeholder="Enter base cost" step="0.01">
+
+        <label for="packagingCost">Packaging & Handling Cost (OMR):</label>
+        <input type="number" id="packagingCost" placeholder="Enter packaging cost" step="0.01">
+
+        <label for="profitMargin">Profit Margin (%):</label>
+        <input type="number" id="profitMargin" placeholder="Enter profit margin" step="0.01">
+
+        <label for="discount">Discount (%):</label>
+        <input type="number" id="discount" placeholder="Enter discount" step="0.01">
+
+        <div class="buttons">
+            <button type="button" onclick="calculatePrice()">Calculate</button>
+            <button type="button" onclick="resetForm()">Reset</button>
+        </div>
+    </form>
+
+    <p>Selling Price Before Discount: <span id="sellingPrice">0.00 OMR</span></p>
+    <p>Final Price After Discount: <span id="finalPrice">0.00 OMR</span></p>
+
+    <script>
+        function calculatePrice() {
+            // Get input values
+            let baseCost = parseFloat(document.getElementById('baseCost').value);
+            let packagingCost = parseFloat(document.getElementById('packagingCost').value);
+            let profitMargin = parseFloat(document.getElementById('profitMargin').value);
+            let discount = parseFloat(document.getElementById('discount').value);
+            
+            // Validate inputs
+            if (isNaN(baseCost) || baseCost < 0 ||
+                isNaN(packagingCost) || packagingCost < 0 ||
+                isNaN(profitMargin) || profitMargin < 0 ||
+                isNaN(discount) || discount < 0 || discount > 100) {
+                alert('Please enter valid numbers. Profit and discount should be between 0 and 100.');
+                return;
+            }
+
+            // Calculate the total cost per unit
+            let totalCost = baseCost + packagingCost;
+
+            // Calculate the selling price before discount
+            let sellingPrice = totalCost * (1 + profitMargin / 100);
+
+            // Calculate the final price after applying the discount
+            let finalPrice = sellingPrice * (1 - discount / 100);
+
+            // Display the results
+            document.getElementById('sellingPrice').textContent = sellingPrice.toFixed(2) + " OMR";
+            document.getElementById('finalPrice').textContent = finalPrice.toFixed(2) + " OMR";
+        }
+
+        function resetForm() {
+            document.querySelector('form').reset();
+            document.getElementById('sellingPrice').textContent = "0.00 OMR";
+            document.getElementById('finalPrice').textContent = "0.00 OMR";
+        }
+    </script>
+
+</body>
+</html>
