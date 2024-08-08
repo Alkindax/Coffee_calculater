@@ -63,8 +63,14 @@
 
     <h1>Price Calculator</h1>
     <form>
-        <label for="baseCost">Base Cost (OMR):</label>
-        <input type="number" id="baseCost" placeholder="Enter base cost" step="0.01">
+        <label for="greenCoffeePrice">Green Coffee Price per kg (OMR):</label>
+        <input type="number" id="greenCoffeePrice" placeholder="Enter green coffee price per kg" step="0.01">
+
+        <label for="roastLoss">Roast Loss Percentage (%):</label>
+        <input type="number" id="roastLoss" placeholder="Enter roast loss percentage" step="0.01">
+
+        <label for="packageWeight">Package Weight (grams):</label>
+        <input type="number" id="packageWeight" placeholder="Enter package weight in grams" step="0.1">
 
         <label for="packagingCost">Packaging & Handling Cost (OMR):</label>
         <input type="number" id="packagingCost" placeholder="Enter packaging cost" step="0.01">
@@ -81,42 +87,55 @@
         </div>
     </form>
 
+    <p>Base Cost per Package: <span id="baseCost">0.00 OMR</span></p>
     <p>Selling Price Before Discount: <span id="sellingPrice">0.00 OMR</span></p>
     <p>Final Price After Discount: <span id="finalPrice">0.00 OMR</span></p>
 
     <script>
         function calculatePrice() {
             // Get input values
-            let baseCost = parseFloat(document.getElementById('baseCost').value);
+            let greenCoffeePrice = parseFloat(document.getElementById('greenCoffeePrice').value);
+            let roastLoss = parseFloat(document.getElementById('roastLoss').value);
+            let packageWeight = parseFloat(document.getElementById('packageWeight').value);
             let packagingCost = parseFloat(document.getElementById('packagingCost').value);
             let profitMargin = parseFloat(document.getElementById('profitMargin').value);
             let discount = parseFloat(document.getElementById('discount').value);
             
             // Validate inputs
-            if (isNaN(baseCost) || baseCost < 0 ||
+            if (isNaN(greenCoffeePrice) || greenCoffeePrice < 0 ||
+                isNaN(roastLoss) || roastLoss < 0 || roastLoss > 100 ||
+                isNaN(packageWeight) || packageWeight <= 0 ||
                 isNaN(packagingCost) || packagingCost < 0 ||
                 isNaN(profitMargin) || profitMargin < 0 ||
                 isNaN(discount) || discount < 0 || discount > 100) {
-                alert('Please enter valid numbers. Profit and discount should be between 0 and 100.');
+                alert('Please enter valid numbers. Roast loss should be between 0 and 100. Package weight must be greater than 0.');
                 return;
             }
 
-            // Calculate the total cost per unit
-            let totalCost = baseCost + packagingCost;
+            // Convert package weight to kg for calculations
+            let packageWeightKg = packageWeight / 1000;
+
+            // Calculate the base cost per kg after roasting loss
+            let roastedCoffeePricePerKg = greenCoffeePrice * (1 - roastLoss / 100);
+
+            // Calculate the base cost for the given package weight
+            let baseCost = roastedCoffeePricePerKg * packageWeightKg + packagingCost;
 
             // Calculate the selling price before discount
-            let sellingPrice = totalCost * (1 + profitMargin / 100);
+            let sellingPrice = baseCost * (1 + profitMargin / 100);
 
             // Calculate the final price after applying the discount
             let finalPrice = sellingPrice * (1 - discount / 100);
 
             // Display the results
+            document.getElementById('baseCost').textContent = baseCost.toFixed(2) + " OMR";
             document.getElementById('sellingPrice').textContent = sellingPrice.toFixed(2) + " OMR";
             document.getElementById('finalPrice').textContent = finalPrice.toFixed(2) + " OMR";
         }
 
         function resetForm() {
             document.querySelector('form').reset();
+            document.getElementById('baseCost').textContent = "0.00 OMR";
             document.getElementById('sellingPrice').textContent = "0.00 OMR";
             document.getElementById('finalPrice').textContent = "0.00 OMR";
         }
