@@ -89,7 +89,9 @@
 
     <p>Base Cost per Package: <span id="baseCost">0.00 OMR</span></p>
     <p>Selling Price Before Discount: <span id="sellingPrice">0.00 OMR</span></p>
+    <p>Profit Before Discount: <span id="profitBeforeDiscount">0.00 OMR</span></p>
     <p>Final Price After Discount: <span id="finalPrice">0.00 OMR</span></p>
+    <p>Profit After Discount: <span id="profitAfterDiscount">0.00 OMR</span></p>
 
     <script>
         function calculatePrice() {
@@ -127,17 +129,25 @@
             // Calculate the final price after applying the discount
             let finalPrice = sellingPrice * (1 - discount / 100);
 
+            // Calculate the profit amounts
+            let profitBeforeDiscount = sellingPrice - baseCost;
+            let profitAfterDiscount = finalPrice - baseCost;
+
             // Display the results
             document.getElementById('baseCost').textContent = baseCost.toFixed(2) + " OMR";
             document.getElementById('sellingPrice').textContent = sellingPrice.toFixed(2) + " OMR";
+            document.getElementById('profitBeforeDiscount').textContent = profitBeforeDiscount.toFixed(2) + " OMR";
             document.getElementById('finalPrice').textContent = finalPrice.toFixed(2) + " OMR";
+            document.getElementById('profitAfterDiscount').textContent = profitAfterDiscount.toFixed(2) + " OMR";
         }
 
         function resetForm() {
             document.querySelector('form').reset();
             document.getElementById('baseCost').textContent = "0.00 OMR";
             document.getElementById('sellingPrice').textContent = "0.00 OMR";
+            document.getElementById('profitBeforeDiscount').textContent = "0.00 OMR";
             document.getElementById('finalPrice').textContent = "0.00 OMR";
+            document.getElementById('profitAfterDiscount').textContent = "0.00 OMR";
         }
     </script>
 
