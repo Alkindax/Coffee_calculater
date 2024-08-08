@@ -115,11 +115,11 @@
             // Convert package weight to kg for calculations
             let packageWeightKg = packageWeight / 1000;
 
-            // Calculate the base cost per kg after roasting loss
-            let roastedCoffeePricePerKg = greenCoffeePrice * (1 - roastLoss / 100);
+            // Calculate the roasted coffee price per kg
+            let adjustedRoastedCoffeePricePerKg = greenCoffeePrice / (1 - roastLoss / 100);
 
             // Calculate the base cost for the given package weight
-            let baseCost = roastedCoffeePricePerKg * packageWeightKg + packagingCost;
+            let baseCost = (adjustedRoastedCoffeePricePerKg * packageWeightKg) + packagingCost;
 
             // Calculate the selling price before discount
             let sellingPrice = baseCost * (1 + profitMargin / 100);
