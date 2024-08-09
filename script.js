@@ -67,6 +67,15 @@ function resetForm() {
 }
 
 function copyResults() {
+    const inputs = `
+Green Coffee Price per kg: ${document.getElementById('greenCoffeePrice').value} OMR
+Roast Loss Percentage: ${document.getElementById('roastLoss').value}%
+Package Weight: ${document.getElementById('packageWeight').value} grams
+Packaging & Handling Cost: ${document.getElementById('packagingCost').value} OMR
+Pricing Option: ${document.getElementById('pricingOption').value === 'profitMargin' ? 'Profit Margin' : 'Fixed Price'}
+${document.getElementById('pricingOption').value === 'profitMargin' ? `Profit Margin: ${document.getElementById('profitMargin').value}%` : `Fixed Selling Price: ${document.getElementById('fixedPrice').value} OMR`}
+Discount: ${document.getElementById('discount').value}%`;
+
     const results = `
 Base Cost per Package: ${document.getElementById('baseCost').textContent}
 Selling Price Before Discount: ${document.getElementById('sellingPrice').textContent}
@@ -76,8 +85,10 @@ Discount Amount: ${document.getElementById('discountAmount').textContent}
 Final Price After Discount: ${document.getElementById('finalPrice').textContent}
 Profit After Discount: ${document.getElementById('profitAfterDiscount').textContent}`;
 
+    const fullCopyText = inputs + "\n\n" + results;
+
     // Copy the results to the clipboard
-    navigator.clipboard.writeText(results).then(() => {
+    navigator.clipboard.writeText(fullCopyText).then(() => {
         alert('Results copied to clipboard!');
     });
 }
