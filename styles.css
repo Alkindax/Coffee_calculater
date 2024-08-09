@@ -52,7 +52,28 @@ p {
 }
 #copyButton {
     background-color: #007bff;
+    margin-top: 20px;
 }
 #copyButton:hover {
     background-color: #0056b3;
+}
+
+/* Styles for the results table */
+#resultsTable {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    font-size: 18px;
+    text-align: left;
+}
+#resultsTable th, #resultsTable td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+#resultsTable th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+#resultsTable td {
+    background-color: #fff;
 }
