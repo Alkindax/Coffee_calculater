@@ -10,6 +10,7 @@
 
     <h1>Price Calculator</h1>
     <form>
+        <!-- Your existing form fields -->
         <label for="greenCoffeePrice">Green Coffee Price per kg (OMR):</label>
         <input type="number" id="greenCoffeePrice" placeholder="Enter green coffee price per kg" step="0.01">
 
@@ -47,13 +48,37 @@
         </div>
     </form>
 
-    <p>Base Cost per Package: <span id="baseCost">0.00 OMR</span></p>
-    <p>Selling Price Before Discount: <span id="sellingPrice">0.00 OMR</span></p>
-    <p>Profit Margin: <span id="calculatedProfitMargin">0.00%</span></p>
-    <p>Profit Before Discount: <span id="profitBeforeDiscount">0.00 OMR</span></p>
-    <p>Discount Amount: <span id="discountAmount">0.00 OMR</span></p>
-    <p>Final Price After Discount: <span id="finalPrice">0.00 OMR</span></p>
-    <p>Profit After Discount: <span id="profitAfterDiscount">0.00 OMR</span></p>
+    <!-- Results Section in Table Format -->
+    <table id="resultsTable">
+        <tr>
+            <th>Base Cost per Package</th>
+            <td id="baseCost">0.00 OMR</td>
+        </tr>
+        <tr>
+            <th>Selling Price Before Discount</th>
+            <td id="sellingPrice">0.00 OMR</td>
+        </tr>
+        <tr>
+            <th>Profit Margin</th>
+            <td id="calculatedProfitMargin">0.00%</td>
+        </tr>
+        <tr>
+            <th>Profit Before Discount</th>
+            <td id="profitBeforeDiscount">0.00 OMR</td>
+        </tr>
+        <tr>
+            <th>Discount Amount</th>
+            <td id="discountAmount">0.00 OMR</td>
+        </tr>
+        <tr>
+            <th>Final Price After Discount</th>
+            <td id="finalPrice">0.00 OMR</td>
+        </tr>
+        <tr>
+            <th>Profit After Discount</th>
+            <td id="profitAfterDiscount">0.00 OMR</td>
+        </tr>
+    </table>
 
     <button id="copyButton" onclick="copyResults()">Copy Results</button>
 
