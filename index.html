@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,80 +9,109 @@
 </head>
 <body>
 
-    <h1>Price Calculator</h1>
-    <form>
-        <!-- Your existing form fields -->
+```
+<h1>Price Calculator</h1>
+<form>
+    <!-- Coffee Name -->
+    <label for="coffeeName">Coffee Name/Type:</label>
+    <input type="text" id="coffeeName" placeholder="e.g., Ethiopian Yirgacheffe, Colombian Supremo">
+
+    <!-- Coffee Price Input Method Selection -->
+    <label for="priceInputMethod">Coffee Price Input Method:</label>
+    <select id="priceInputMethod" onchange="togglePriceInputMethod()">
+        <option value="perKg">Price per kg</option>
+        <option value="totalBag">Total bag price & weight</option>
+    </select>
+
+    <!-- Price per kg input (default) -->
+    <div id="perKgInput">
         <label for="greenCoffeePrice">Green Coffee Price per kg (OMR):</label>
         <input type="number" id="greenCoffeePrice" placeholder="Enter green coffee price per kg" step="0.01">
+    </div>
 
-        <label for="roastLoss">Roast Loss Percentage (%):</label>
-        <input type="number" id="roastLoss" placeholder="Enter roast loss percentage" step="0.01">
+    <!-- Total bag price and weight input (alternative) -->
+    <div id="totalBagInput" style="display:none;">
+        <label for="bagTotalPrice">Total Bag Price (OMR):</label>
+        <input type="number" id="bagTotalPrice" placeholder="Enter total bag price" step="0.01" oninput="calculatePricePerKg()">
 
-        <label for="packageWeight">Package Weight (grams):</label>
-        <input type="number" id="packageWeight" placeholder="Enter package weight in grams" step="0.1">
+        <label for="bagTotalWeight">Total Bag Weight (grams):</label>
+        <input type="number" id="bagTotalWeight" placeholder="Enter total bag weight in grams" step="1" oninput="calculatePricePerKg()">
 
-        <label for="packagingCost">Packaging & Handling Cost (OMR):</label>
-        <input type="number" id="packagingCost" placeholder="Enter packaging cost" step="0.01">
-
-        <label for="pricingOption">Pricing Option:</label>
-        <select id="pricingOption" onchange="togglePricingOption()">
-            <option value="profitMargin">Profit Margin (%)</option>
-            <option value="fixedPrice">Fixed Selling Price (OMR)</option>
-        </select>
-
-        <div id="profitMarginInput">
-            <label for="profitMargin">Profit Margin (%):</label>
-            <input type="number" id="profitMargin" placeholder="Enter profit margin" step="0.01">
+        <div id="calculatedPricePerKg" class="calculated-value" style="display:none;">
+            Calculated Price per kg: <span id="pricePerKgValue">0.00</span> OMR
         </div>
+    </div>
 
-        <div id="fixedPriceInput" style="display:none;">
-            <label for="fixedPrice">Fixed Selling Price (OMR):</label>
-            <input type="number" id="fixedPrice" placeholder="Enter fixed selling price" step="0.01">
-        </div>
+    <label for="roastLoss">Roast Loss Percentage (%):</label>
+    <input type="number" id="roastLoss" placeholder="Enter roast loss percentage" step="0.01">
 
-        <label for="discount">Discount (%):</label>
-        <input type="number" id="discount" placeholder="Enter discount" step="0.01">
+    <label for="packageWeight">Package Weight (grams):</label>
+    <input type="number" id="packageWeight" placeholder="Enter package weight in grams" step="0.1">
 
-        <div class="buttons">
-            <button type="button" onclick="calculatePrice()">Calculate</button>
-            <button type="button" onclick="resetForm()">Reset</button>
-        </div>
-    </form>
+    <label for="packagingCost">Packaging & Handling Cost (OMR):</label>
+    <input type="number" id="packagingCost" placeholder="Enter packaging cost" step="0.01">
 
-    <!-- Results Section in Table Format -->
-    <table id="resultsTable">
-        <tr>
-            <th>Base Cost per Package</th>
-            <td id="baseCost">0.00 OMR</td>
-        </tr>
-        <tr>
-            <th>Selling Price Before Discount</th>
-            <td id="sellingPrice">0.00 OMR</td>
-        </tr>
-        <tr>
-            <th>Profit Margin</th>
-            <td id="calculatedProfitMargin">0.00%</td>
-        </tr>
-        <tr>
-            <th>Profit Before Discount</th>
-            <td id="profitBeforeDiscount">0.00 OMR</td>
-        </tr>
-        <tr>
-            <th>Discount Amount</th>
-            <td id="discountAmount">0.00 OMR</td>
-        </tr>
-        <tr>
-            <th>Final Price After Discount</th>
-            <td id="finalPrice">0.00 OMR</td>
-        </tr>
-        <tr>
-            <th>Profit After Discount</th>
-            <td id="profitAfterDiscount">0.00 OMR</td>
-        </tr>
-    </table>
+    <label for="pricingOption">Pricing Option:</label>
+    <select id="pricingOption" onchange="togglePricingOption()">
+        <option value="profitMargin">Profit Margin (%)</option>
+        <option value="fixedPrice">Fixed Selling Price (OMR)</option>
+    </select>
 
-    <button id="copyButton" onclick="copyResults()">Copy Results</button>
+    <div id="profitMarginInput">
+        <label for="profitMargin">Profit Margin (%):</label>
+        <input type="number" id="profitMargin" placeholder="Enter profit margin" step="0.01">
+    </div>
 
-    <script src="script.js"></script>
+    <div id="fixedPriceInput" style="display:none;">
+        <label for="fixedPrice">Fixed Selling Price (OMR):</label>
+        <input type="number" id="fixedPrice" placeholder="Enter fixed selling price" step="0.01">
+    </div>
+
+    <label for="discount">Discount (%):</label>
+    <input type="number" id="discount" placeholder="Enter discount" step="0.01">
+
+    <div class="buttons">
+        <button type="button" onclick="calculatePrice()">Calculate</button>
+        <button type="button" onclick="resetForm()">Reset</button>
+    </div>
+</form>
+
+<!-- Results Section in Table Format -->
+<table id="resultsTable">
+    <tr>
+        <th>Base Cost per Package</th>
+        <td id="baseCost">0.00 OMR</td>
+    </tr>
+    <tr>
+        <th>Selling Price Before Discount</th>
+        <td id="sellingPrice">0.00 OMR</td>
+    </tr>
+    <tr>
+        <th>Profit Margin</th>
+        <td id="calculatedProfitMargin">0.00%</td>
+    </tr>
+    <tr>
+        <th>Profit Before Discount</th>
+        <td id="profitBeforeDiscount">0.00 OMR</td>
+    </tr>
+    <tr>
+        <th>Discount Amount</th>
+        <td id="discountAmount">0.00 OMR</td>
+    </tr>
+    <tr>
+        <th>Final Price After Discount</th>
+        <td id="finalPrice">0.00 OMR</td>
+    </tr>
+    <tr>
+        <th>Profit After Discount</th>
+        <td id="profitAfterDiscount">0.00 OMR</td>
+    </tr>
+</table>
+
+<button id="copyButton" onclick="copyResults()">Copy Results</button>
+
+<script src="script.js"></script>
+```
+
 </body>
 </html>
