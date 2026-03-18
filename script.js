@@ -98,18 +98,27 @@ function resetForm() {
 }
 
 function copyResults() {
-    const text = `
-Coffee Calculator Results
+    const coffeeName = document.getElementById('coffeeName').value || 'Not specified';
 
-Base Cost: ${document.getElementById('baseCost').textContent}
-Selling Price: ${document.getElementById('sellingPrice').textContent}
-Profit Margin: ${document.getElementById('calculatedProfitMargin').textContent}
-Profit Before Discount: ${document.getElementById('profitBeforeDiscount').textContent}
-Discount: ${document.getElementById('discountAmount').textContent}
-Final Price: ${document.getElementById('finalPrice').textContent}
-Profit After Discount: ${document.getElementById('profitAfterDiscount').textContent}
-`;
+    const text = `☕ *COFFEE PRICE CALCULATION*
+━━━━━━━━━━━━━━━━━━━━━━━
 
-    navigator.clipboard.writeText(text);
-    alert("Copied!");
+📌 *Coffee:* ${coffeeName}
+
+💰 *Base Cost:* ${document.getElementById('baseCost').textContent}
+💵 *Selling Price:* ${document.getElementById('sellingPrice').textContent}
+
+📊 *Profit Margin:* ${document.getElementById('calculatedProfitMargin').textContent}
+📈 *Profit Before Discount:* ${document.getElementById('profitBeforeDiscount').textContent}
+
+🏷️ *Discount:* ${document.getElementById('discountAmount').textContent}
+✅ *Final Price:* ${document.getElementById('finalPrice').textContent}
+
+💹 *Profit After Discount:* ${document.getElementById('profitAfterDiscount').textContent}
+
+━━━━━━━━━━━━━━━━━━━━━━━`;
+
+    navigator.clipboard.writeText(text)
+        .then(() => alert("Copied for WhatsApp ✅"))
+        .catch(() => alert("Copy failed ❌"));
 }
