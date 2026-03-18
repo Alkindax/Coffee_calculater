@@ -1,115 +1,88 @@
-function togglePriceInputMethod() {
-    const method = document.getElementById('priceInputMethod').value;
-    document.getElementById('perKgInput').style.display =
-        method === 'perKg' ? 'block' : 'none';
-    document.getElementById('totalBagInput').style.display =
-        method === 'totalBag' ? 'block' : 'none';
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-function calculatePricePerKg() {
-    const bagPrice = parseFloat(document.getElementById('bagTotalPrice').value);
-    const bagWeight = parseFloat(document.getElementById('bagTotalWeight').value);
+<h1>Price Calculator</h1>
 
-    if (bagPrice > 0 && bagWeight > 0) {
-        const pricePerKg = (bagPrice / bagWeight) * 1000;
-        document.getElementById('pricePerKgValue').textContent = pricePerKg.toFixed(2);
-        document.getElementById('calculatedPricePerKg').style.display = 'block';
-    } else {
-        document.getElementById('calculatedPricePerKg').style.display = 'none';
-    }
-}
+<form>
+    <label for="coffeeName">Coffee Name/Type:</label>
+    <input type="text" id="coffeeName">
 
-function togglePricingOption() {
-    const option = document.getElementById('pricingOption').value;
-    document.getElementById('profitMarginInput').style.display =
-        option === 'profitMargin' ? 'block' : 'none';
-    document.getElementById('fixedPriceInput').style.display =
-        option === 'fixedPrice' ? 'block' : 'none';
-}
+    <label for="priceInputMethod">Coffee Price Input Method:</label>
+    <select id="priceInputMethod" onchange="togglePriceInputMethod()">
+        <option value="perKg">Price per kg</option>
+        <option value="totalBag">Total bag price & weight</option>
+    </select>
 
-function calculatePrice() {
-    let greenCoffeePrice;
-    const inputMethod = document.getElementById('priceInputMethod').value;
+    <div id="perKgInput">
+        <label>Green Coffee Price per kg (OMR):</label>
+        <input type="number" id="greenCoffeePrice" step="0.01">
+    </div>
 
-    if (inputMethod === 'perKg') {
-        greenCoffeePrice = parseFloat(document.getElementById('greenCoffeePrice').value);
-    } else {
-        const bagPrice = parseFloat(document.getElementById('bagTotalPrice').value);
-        const bagWeight = parseFloat(document.getElementById('bagTotalWeight').value);
+    <div id="totalBagInput" style="display:none;">
+        <label>Total Bag Price (OMR):</label>
+        <input type="number" id="bagTotalPrice" step="0.01" oninput="calculatePricePerKg()">
 
-        if (!(bagPrice > 0 && bagWeight > 0)) {
-            alert('Enter valid bag price and weight');
-            return;
-        }
+        <label>Total Bag Weight (grams):</label>
+        <input type="number" id="bagTotalWeight" step="1" oninput="calculatePricePerKg()">
 
-        greenCoffeePrice = (bagPrice / bagWeight) * 1000;
-    }
+        <div id="calculatedPricePerKg" class="calculated-value" style="display:none;">
+            Calculated Price per kg: <span id="pricePerKgValue">0.00</span> OMR
+        </div>
+    </div>
 
-    let roastLoss = parseFloat(document.getElementById('roastLoss').value) || 0;
-    let packageWeight = parseFloat(document.getElementById('packageWeight').value) || 0;
-    let packagingCost = parseFloat(document.getElementById('packagingCost').value) || 0;
-    let discount = parseFloat(document.getElementById('discount').value) || 0;
-    let pricingOption = document.getElementById('pricingOption').value;
+    <label>Roast Loss (%):</label>
+    <input type="number" id="roastLoss" step="0.01">
 
-    if (roastLoss >= 100) {
-        alert('Roast loss must be less than 100%');
-        return;
-    }
+    <label>Package Weight (grams):</label>
+    <input type="number" id="packageWeight" step="0.1">
 
-    let packageWeightKg = packageWeight / 1000;
-    let roastedPricePerKg = greenCoffeePrice / (1 - roastLoss / 100);
-    let baseCost = (roastedPricePerKg * packageWeightKg) + packagingCost;
+    <label>Packaging Cost (OMR):</label>
+    <input type="number" id="packagingCost" step="0.01">
 
-    let sellingPrice, profitMargin;
+    <label>Pricing Option:</label>
+    <select id="pricingOption" onchange="togglePricingOption()">
+        <option value="profitMargin">Profit Margin (%)</option>
+        <option value="fixedPrice">Fixed Selling Price</option>
+    </select>
 
-    if (pricingOption === 'profitMargin') {
-        profitMargin = parseFloat(document.getElementById('profitMargin').value) || 0;
-        sellingPrice = baseCost * (1 + profitMargin / 100);
-    } else {
-        sellingPrice = parseFloat(document.getElementById('fixedPrice').value) || 0;
-        profitMargin = ((sellingPrice - baseCost) / baseCost) * 100;
-    }
+    <div id="profitMarginInput">
+        <label>Profit Margin (%):</label>
+        <input type="number" id="profitMargin" step="0.01">
+    </div>
 
-    let finalPrice = sellingPrice * (1 - discount / 100);
-    let profitBeforeDiscount = sellingPrice - baseCost;
-    let profitAfterDiscount = finalPrice - baseCost;
-    let discountAmount = sellingPrice - finalPrice;
+    <div id="fixedPriceInput" style="display:none;">
+        <label>Fixed Price (OMR):</label>
+        <input type="number" id="fixedPrice" step="0.01">
+    </div>
 
-    document.getElementById('baseCost').textContent = baseCost.toFixed(2) + " OMR";
-    document.getElementById('sellingPrice').textContent = sellingPrice.toFixed(2) + " OMR";
-    document.getElementById('calculatedProfitMargin').textContent = profitMargin.toFixed(2) + "%";
-    document.getElementById('profitBeforeDiscount').textContent = profitBeforeDiscount.toFixed(2) + " OMR";
-    document.getElementById('discountAmount').textContent = discountAmount.toFixed(2) + " OMR";
-    document.getElementById('finalPrice').textContent = finalPrice.toFixed(2) + " OMR";
-    document.getElementById('profitAfterDiscount').textContent = profitAfterDiscount.toFixed(2) + " OMR";
-}
+    <label>Discount (%):</label>
+    <input type="number" id="discount" step="0.01">
 
-function resetForm() {
-    document.querySelector('form').reset();
+    <div class="buttons">
+        <button type="button" onclick="calculatePrice()">Calculate</button>
+        <button type="button" onclick="resetForm()">Reset</button>
+    </div>
+</form>
 
-    ['baseCost','sellingPrice','profitBeforeDiscount','discountAmount','finalPrice','profitAfterDiscount']
-        .forEach(id => document.getElementById(id).textContent = "0.00 OMR");
+<table id="resultsTable">
+    <tr><th>Base Cost</th><td id="baseCost">0.00 OMR</td></tr>
+    <tr><th>Selling Price</th><td id="sellingPrice">0.00 OMR</td></tr>
+    <tr><th>Profit Margin</th><td id="calculatedProfitMargin">0.00%</td></tr>
+    <tr><th>Profit Before Discount</th><td id="profitBeforeDiscount">0.00 OMR</td></tr>
+    <tr><th>Discount</th><td id="discountAmount">0.00 OMR</td></tr>
+    <tr><th>Final Price</th><td id="finalPrice">0.00 OMR</td></tr>
+    <tr><th>Profit After Discount</th><td id="profitAfterDiscount">0.00 OMR</td></tr>
+</table>
 
-    document.getElementById('calculatedProfitMargin').textContent = "0.00%";
-    document.getElementById('calculatedPricePerKg').style.display = 'none';
+<button id="copyButton" onclick="copyResults()">Copy Results</button>
 
-    togglePricingOption();
-    togglePriceInputMethod();
-}
-
-function copyResults() {
-    const text = `
-Coffee Calculator Results
-
-Base Cost: ${document.getElementById('baseCost').textContent}
-Selling Price: ${document.getElementById('sellingPrice').textContent}
-Profit Margin: ${document.getElementById('calculatedProfitMargin').textContent}
-Profit Before Discount: ${document.getElementById('profitBeforeDiscount').textContent}
-Discount: ${document.getElementById('discountAmount').textContent}
-Final Price: ${document.getElementById('finalPrice').textContent}
-Profit After Discount: ${document.getElementById('profitAfterDiscount').textContent}
-`;
-
-    navigator.clipboard.writeText(text);
-    alert("Copied!");
-}
+<script src="script.js"></script>
+</body>
+</html>
